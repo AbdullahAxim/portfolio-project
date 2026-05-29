@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Development Process — Portfolio Project</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #1a1a1a;
+    background: #ffffff;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* ── HEADER ── */
+  .doc-header {
+    border-bottom: 2px solid #1a1a1a;
+    padding-bottom: 24px;
+    margin-bottom: 40px;
+  }
+
+  .doc-meta {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .doc-title {
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .doc-subtitle {
+    font-size: 15px;
+    color: #444;
+    font-style: italic;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-title {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin-bottom: 12px;
+    color: #333;
+  }
+
+  ul, ol {
+    padding-left: 24px;
+    margin-bottom: 16px;
+  }
+
+  li {
+    margin-bottom: 6px;
+    color: #333;
+  }
+
+  /* ── STAGE BLOCKS ── */
+  .stage {
+    margin-bottom: 36px;
+    padding: 24px;
+    border: 1px solid #e0e0e0;
+    border-left: 4px solid #1a1a1a;
+  }
+
+  .stage-number {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #999;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .stage-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+
+  .stage-rule {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #666;
+    background: #f5f5f5;
+    padding: 8px 12px;
+    margin-top: 12px;
+    border-left: 2px solid #999;
+  }
+
+  /* ── CHANGELOG ── */
+  .changelog-entry {
+    padding: 16px 0;
+    border-bottom: 1px solid #e0e0e0;
+    display: grid;
+    grid-template-columns: 140px 80px 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .changelog-entry:last-child { border-bottom: none; }
+
+  .changelog-date {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #666;
+  }
+
+  .changelog-tag {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+  }
+
+  .tag-init    { background: #e8f4e8; color: #2d6a2d; border: 1px solid #a8d4a8; }
+  .tag-update  { background: #e8f0ff; color: #2d4a8a; border: 1px solid #a8b8e8; }
+  .tag-fix     { background: #fff4e8; color: #8a4a2d; border: 1px solid #e8c4a8; }
+  .tag-add     { background: #f4e8ff; color: #5a2d8a; border: 1px solid #c4a8e8; }
+
+  .changelog-desc {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  /* ── INFO TABLE ── */
+  .info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+    font-size: 14px;
+  }
+
+  .info-table td {
+    padding: 10px 14px;
+    border: 1px solid #e0e0e0;
+    vertical-align: top;
+  }
+
+  .info-table td:first-child {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #666;
+    background: #f9f9f9;
+    width: 160px;
+    white-space: nowrap;
+  }
+
+  /* ── STATUS TABLE ── */
+  .status-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .status-table th {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 8px 14px;
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    color: #666;
+  }
+
+  .status-table td {
+    padding: 10px 14px;
+    border: 1px solid #e0e0e0;
+    vertical-align: top;
+  }
+
+  .status {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+    font-weight: bold;
+  }
+
+  .s-done       { background: #e8f4e8; color: #2d6a2d; border: 1px solid #a8d4a8; }
+  .s-active     { background: #fff8e0; color: #7a5a00; border: 1px solid #e8d080; }
+  .s-pending    { background: #f5f5f5; color: #888; border: 1px solid #ddd; }
+  .s-blocked    { background: #ffe8e8; color: #8a2d2d; border: 1px solid #e8a8a8; }
+
+  /* ── RULES ── */
+  .rules-list {
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .rules-list li {
+    padding: 10px 16px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 14px;
+    display: flex;
+    gap: 12px;
+  }
+
+  .rules-list li:last-child { border-bottom: none; }
+
+  .rule-num {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #999;
+    flex-shrink: 0;
+    width: 24px;
+  }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 24px;
+    margin-top: 60px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #999;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* ── PRINT / GITHUB FRIENDLY ── */
+  @media print {
+    body { padding: 20px; }
+    .stage { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="doc-meta">DOCUMENT TYPE: PROCESS DEFINITION &nbsp;|&nbsp; REPO: AbdullahAxim/portfolio-project &nbsp;|&nbsp; VERSION: 1.0</div>
+    <div class="doc-title">Portfolio Project — Development Process</div>
+    <div class="doc-subtitle">Refined SDLC-based process for the design and development of a personal portfolio website.</div>
+  </div>
+
+  <!-- PROJECT INFO -->
+  <div class="section">
+    <div class="section-title">Project Overview</div>
+    <h2>Project Information</h2>
+    <table class="info-table">
+      <tr><td>Project Name</td><td>Personal Portfolio Website</td></tr>
+      <tr><td>Owner</td><td>Muhammad Abdullah Asim</td></tr>
+      <tr><td>GitHub</td><td>github.com/AbdullahAxim/portfolio-project</td></tr>
+      <tr><td>Stack</td><td>HTML / CSS / JavaScript — Node.js / Express — MongoDB</td></tr>
+      <tr><td>Started</td><td>May 2026</td></tr>
+      <tr><td>Document Version</td><td>1.0</td></tr>
+      <tr><td>Last Updated</td><td>May 2026</td></tr>
+    </table>
+  </div>
+
+  <!-- STAGE STATUS -->
+  <div class="section">
+    <div class="section-title">Progress Tracker</div>
+    <h2>Stage Status</h2>
+    <table class="status-table">
+      <tr>
+        <th>Stage</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Notes</th>
+      </tr>
+      <tr>
+        <td>Stage 1</td>
+        <td>Requirements</td>
+        <td><span class="status s-active">IN PROGRESS</span></td>
+        <td>Initial requirements being gathered</td>
+      </tr>
+      <tr>
+        <td>Stage 2</td>
+        <td>UI Design</td>
+        <td><span class="status s-pending">PENDING</span></td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Stage 3</td>
+        <td>Frontend Development</td>
+        <td><span class="status s-pending">PENDING</span></td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Stage 4</td>
+        <td>Database Design</td>
+        <td><span class="status s-pending">PENDING</span></td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Stage 5</td>
+        <td>Backend Development</td>
+        <td><span class="status s-pending">PENDING</span></td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Stage 6</td>
+        <td>Integration</td>
+        <td><span class="status s-pending">PENDING</span></td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Stage 7</td>
+        <td>Testing</td>
+        <td><span class="status s-pending">PENDING</span></td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Stage 8</td>
+        <td>Deployment</td>
+        <td><span class="status s-pending">PENDING</span></td>
+        <td>—</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- THE PROCESS -->
+  <div class="section">
+    <div class="section-title">The Development Process</div>
+    <h2>Stages — Defined</h2>
+
+    <div class="stage">
+      <div class="stage-number">Stage 01</div>
+      <div class="stage-title">Requirements</div>
+      <p>Define every feature, page and function the system must have before any design or code begins. Requirements are split into functional and non-functional. Any new idea introduced in a later stage must be brought back to this document first before implementation.</p>
+      <ul>
+        <li>Define project goals and target audience</li>
+        <li>List every page and its purpose</li>
+        <li>List every feature — functional and non-functional</li>
+        <li>Identify which content is static and which is dynamic (DB-driven)</li>
+        <li>Document approved and signed off before Stage 2 begins</li>
+      </ul>
+      <div class="stage-rule">EXIT CONDITION: Requirements document approved. No design begins until this stage is complete.</div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-number">Stage 02</div>
+      <div class="stage-title">UI Design</div>
+      <p>Design every page visually in HTML/CSS. One page at a time. Each page is reviewed and approved before the next is designed. Design files are built with backend integration in mind — dynamic sections are clearly marked.</p>
+      <ul>
+        <li>Design one page at a time</li>
+        <li>Each page reviewed and approved before moving to next</li>
+        <li>Mark all sections that will be fed by the database</li>
+        <li>Design changes are allowed but must be documented</li>
+        <li>All pages approved before Stage 3 begins</li>
+      </ul>
+      <div class="stage-rule">EXIT CONDITION: All pages designed and approved. No frontend code begins until this stage is complete.</div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-number">Stage 03</div>
+      <div class="stage-title">Frontend Development</div>
+      <p>Build every page from the approved designs. Use static placeholder data where the database will later feed content. Code is written clean and structured for easy backend connection. One page built and approved before moving to the next.</p>
+      <ul>
+        <li>Build from approved designs only — no improvising</li>
+        <li>Use placeholder data where DB will feed later</li>
+        <li>One page reviewed and approved before next page starts</li>
+        <li>Code written clean and structured for backend integration</li>
+        <li>All pages complete and approved before Stage 4 begins</li>
+      </ul>
+      <div class="stage-rule">EXIT CONDITION: All frontend pages complete, reviewed, and approved. No database design begins until this stage is complete.</div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-number">Stage 04</div>
+      <div class="stage-title">Database Design</div>
+      <p>Design the database using the completed frontend as reference. Document every collection, every field and every relationship. Database design is approved before any backend code is written.</p>
+      <ul>
+        <li>Use completed frontend to identify all dynamic data</li>
+        <li>Define every collection and its fields</li>
+        <li>Define relationships between collections</li>
+        <li>Document approved before Stage 5 begins</li>
+      </ul>
+      <div class="stage-rule">EXIT CONDITION: Database design document approved. No backend code begins until this stage is complete.</div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-number">Stage 05</div>
+      <div class="stage-title">Backend Development</div>
+      <p>Build the server and API using the frontend and database design as reference. One endpoint at a time. Each endpoint tested independently before moving to the next. No changes to frontend during this stage.</p>
+      <ul>
+        <li>Set up Node.js + Express server</li>
+        <li>Build API endpoints based on DB design</li>
+        <li>Test each endpoint independently before moving to next</li>
+        <li>No frontend changes during this stage</li>
+      </ul>
+      <div class="stage-rule">EXIT CONDITION: All API endpoints built and tested independently. No integration begins until this stage is complete.</div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-number">Stage 06</div>
+      <div class="stage-title">Integration</div>
+      <p>Connect the frontend to the backend. Replace placeholder data with real API calls one section at a time. Test each connection immediately after making it.</p>
+      <ul>
+        <li>Replace placeholder data section by section</li>
+        <li>Test each connection immediately after making it</li>
+        <li>Handle loading states and errors</li>
+        <li>Verify every page displays real data correctly</li>
+      </ul>
+      <div class="stage-rule">EXIT CONDITION: All sections connected to backend and verified working. No testing stage begins until this is complete.</div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-number">Stage 07</div>
+      <div class="stage-title">Testing</div>
+      <p>Test the complete system — frontend, backend and database together. Every issue is logged, fixed and verified before deployment.</p>
+      <ul>
+        <li>Functional testing — every feature works as expected</li>
+        <li>UI testing — every page correct on all screen sizes</li>
+        <li>Data testing — DB changes reflect on frontend correctly</li>
+        <li>Bug log created — every issue documented and fixed</li>
+      </ul>
+      <div class="stage-rule">EXIT CONDITION: All tests passed. Bug log cleared. No deployment until this stage is complete.</div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-number">Stage 08</div>
+      <div class="stage-title">Deployment</div>
+      <p>Deploy frontend, backend and database separately. Verify everything works on the live environment. Create a maintenance document for updating content going forward.</p>
+      <ul>
+        <li>Deploy frontend — Vercel or Netlify</li>
+        <li>Deploy backend — Railway or Render</li>
+        <li>Deploy database — MongoDB Atlas</li>
+        <li>Smoke test after deployment</li>
+        <li>Maintenance document created</li>
+      </ul>
+      <div class="stage-rule">EXIT CONDITION: Live site verified working. Maintenance document complete.</div>
+    </div>
+  </div>
+
+  <!-- GROUND RULES -->
+  <div class="section">
+    <div class="section-title">Process Rules</div>
+    <h2>Ground Rules</h2>
+    <ul class="rules-list">
+      <li><span class="rule-num">01</span>Nothing moves to the next stage until the current stage is approved.</li>
+      <li><span class="rule-num">02</span>Every new idea or requirement change is documented in the requirements before implementation.</li>
+      <li><span class="rule-num">03</span>Each stage has a clear exit condition — the condition must be met before moving forward.</li>
+      <li><span class="rule-num">04</span>No assumptions — if something is unclear it is discussed and documented before building.</li>
+      <li><span class="rule-num">05</span>Every meaningful change to the project is committed to GitHub with a clear commit message.</li>
+      <li><span class="rule-num">06</span>This document is updated at every stage transition and whenever requirements change.</li>
+      <li><span class="rule-num">07</span>Design decisions are explained so the developer understands every choice made.</li>
+    </ul>
+  </div>
+
+  <!-- CHANGELOG -->
+  <div class="section">
+    <div class="section-title">Document History</div>
+    <h2>Changelog</h2>
+
+    <div class="changelog-entry">
+      <div class="changelog-date">May 2026</div>
+      <div><span class="changelog-tag tag-init">INIT</span></div>
+      <div class="changelog-desc">Document created. Development process defined and approved. GitHub repository set up. Folder structure established.</div>
+    </div>
+
+    <!-- Future entries added below this line -->
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <span>portfolio-project / docs / PROCESS.html</span>
+    <span>Muhammad Abdullah Asim &nbsp;|&nbsp; github.com/AbdullahAxim</span>
+    <span>Version 1.0 &nbsp;|&nbsp; May 2026</span>
+  </div>
+
+</body>
+</html>
