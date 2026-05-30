@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Requirements Document — Portfolio Project</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #1a1a1a;
+    background: #ffffff;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* ── HEADER ── */
+  .doc-header {
+    border-bottom: 2px solid #1a1a1a;
+    padding-bottom: 24px;
+    margin-bottom: 40px;
+  }
+
+  .doc-meta {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .doc-title {
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .doc-subtitle {
+    font-size: 15px;
+    color: #444;
+    font-style: italic;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-label {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 28px;
+    margin-bottom: 10px;
+    color: #1a1a1a;
+  }
+
+  h4 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    color: #333;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  p {
+    margin-bottom: 12px;
+    color: #333;
+  }
+
+  ul, ol {
+    padding-left: 24px;
+    margin-bottom: 16px;
+  }
+
+  li {
+    margin-bottom: 6px;
+    color: #333;
+    font-size: 14px;
+  }
+
+  /* ── INFO TABLE ── */
+  .info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+    font-size: 14px;
+  }
+
+  .info-table td {
+    padding: 10px 14px;
+    border: 1px solid #e0e0e0;
+    vertical-align: top;
+  }
+
+  .info-table td:first-child {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #666;
+    background: #f9f9f9;
+    width: 200px;
+    white-space: nowrap;
+  }
+
+  /* ── PAGE BLOCK ── */
+  .page-block {
+    border: 1px solid #e0e0e0;
+    border-left: 4px solid #1a1a1a;
+    margin-bottom: 24px;
+    padding: 24px;
+  }
+
+  .page-id {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #999;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .page-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .page-desc {
+    font-size: 14px;
+    color: #555;
+    font-style: italic;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .sections-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .section-chip {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    padding: 6px 10px;
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .chip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    flex-shrink: 0;
+  }
+
+  .chip-dot.dynamic { background: #2d6a8a; }
+  .chip-dot.static  { background: #999; }
+
+  /* ── REQUIREMENT ROWS ── */
+  .req-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .req-table th {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 8px 14px;
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    color: #666;
+  }
+
+  .req-table td {
+    padding: 10px 14px;
+    border: 1px solid #e0e0e0;
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .req-id {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #999;
+    white-space: nowrap;
+  }
+
+  .priority {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+    font-weight: bold;
+  }
+
+  .p-high   { background: #ffe8e8; color: #8a2d2d; border: 1px solid #e8a8a8; }
+  .p-medium { background: #fff4e0; color: #7a5000; border: 1px solid #e8d090; }
+  .p-low    { background: #f0f0f0; color: #666; border: 1px solid #ddd; }
+
+  .type {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .t-func    { background: #e8f0ff; color: #2d4a8a; border: 1px solid #b0c0e8; }
+  .t-nonfunc { background: #f0ffe8; color: #2d6a2d; border: 1px solid #a8d8a8; }
+
+  /* ── DB TABLE ── */
+  .db-block {
+    border: 1px solid #e0e0e0;
+    margin-bottom: 16px;
+    padding: 20px 24px;
+  }
+
+  .db-name {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e0e0e0;
+    color: #1a1a1a;
+  }
+
+  .db-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .db-field {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    padding: 4px 10px;
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    color: #333;
+  }
+
+  .db-field.key {
+    background: #1a1a1a;
+    color: #fff;
+    border-color: #1a1a1a;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+    font-size: 12px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Courier New', monospace;
+    color: #666;
+  }
+
+  /* ── CHANGELOG ── */
+  .changelog-entry {
+    padding: 14px 0;
+    border-bottom: 1px solid #e0e0e0;
+    display: grid;
+    grid-template-columns: 140px 90px 1fr;
+    gap: 16px;
+    align-items: start;
+    font-size: 14px;
+  }
+
+  .changelog-entry:last-child { border-bottom: none; }
+
+  .cl-date {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #666;
+  }
+
+  .cl-tag {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .tag-init   { background: #e8f4e8; color: #2d6a2d; border: 1px solid #a8d4a8; }
+  .tag-update { background: #e8f0ff; color: #2d4a8a; border: 1px solid #a8b8e8; }
+
+  /* ── APPROVAL ── */
+  .approval-box {
+    border: 1px solid #e0e0e0;
+    padding: 24px;
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .approval-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .approval-label {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #999;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .approval-value {
+    font-size: 14px;
+    color: #1a1a1a;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #1a1a1a;
+    min-height: 28px;
+  }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 24px;
+    margin-top: 60px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #999;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .note {
+    background: #fffbe6;
+    border: 1px solid #f0d060;
+    border-left: 3px solid #f0d060;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #5a4800;
+    margin-bottom: 20px;
+    font-family: 'Courier New', monospace;
+  }
+</style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="doc-meta">DOCUMENT TYPE: REQUIREMENTS &nbsp;|&nbsp; STAGE: 01 &nbsp;|&nbsp; REPO: AbdullahAxim/portfolio-project &nbsp;|&nbsp; VERSION: 1.0</div>
+    <div class="doc-title">Portfolio Project — Requirements Document</div>
+    <div class="doc-subtitle">Complete functional and non-functional requirements for the personal portfolio website of Muhammad Abdullah Asim.</div>
+  </div>
+
+  <!-- PROJECT INFO -->
+  <div class="section">
+    <div class="section-label">Project Overview</div>
+    <h2>Project Information</h2>
+    <table class="info-table">
+      <tr><td>Project Name</td><td>Personal Portfolio Website</td></tr>
+      <tr><td>Owner</td><td>Muhammad Abdullah Asim</td></tr>
+      <tr><td>GitHub</td><td>github.com/AbdullahAxim/portfolio-project</td></tr>
+      <tr><td>Stack</td><td>HTML / CSS / JavaScript — Node.js / Express — MongoDB</td></tr>
+      <tr><td>Target Audience</td><td>International — potential employers, freelance clients, collaborators, personal brand audience</td></tr>
+      <tr><td>Primary Goal</td><td>Establish a strong online presence. Impress every visitor with a design they have never seen before. Convert visitors into opportunities.</td></tr>
+      <tr><td>Platform</td><td>Desktop only (initial release)</td></tr>
+      <tr><td>Language</td><td>English only</td></tr>
+      <tr><td>Domain</td><td>Free deployment URL (initial). Custom domain to be considered post-launch.</td></tr>
+      <tr><td>Document Version</td><td>1.0</td></tr>
+      <tr><td>Stage Status</td><td>Stage 1 — Requirements — IN PROGRESS</td></tr>
+    </table>
+  </div>
+
+  <!-- PAGES -->
+  <div class="section">
+    <div class="section-label">Section B</div>
+    <h2>Pages & Sections</h2>
+
+    <div class="legend">
+      <div class="legend-item"><div class="chip-dot dynamic"></div> Dynamic — fed from database</div>
+      <div class="legend-item"><div class="chip-dot static"></div> Static — hardcoded in HTML</div>
+    </div>
+
+    <!-- HOME -->
+    <div class="page-block">
+      <div class="page-id">PAGE 01</div>
+      <div class="page-name">Home</div>
+      <div class="page-desc">The main landing page. Contains short preview glimpses of all major sections. A visitor can scroll through the entire Home page and get a complete overview of the portfolio without navigating to any other page. Each section links to its dedicated full page.</div>
+      <div class="sections-grid">
+        <div class="section-chip"><div class="chip-dot static"></div>Hero</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Experiences (preview)</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Services / Domains (preview)</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Projects (preview)</div>
+        <div class="section-chip"><div class="chip-dot static"></div>About (preview)</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Articles (preview)</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Journey (preview)</div>
+        <div class="section-chip"><div class="chip-dot static"></div>Contact</div>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="page-block">
+      <div class="page-id">PAGE 02</div>
+      <div class="page-name">About</div>
+      <div class="page-desc">Full detailed page about Muhammad Abdullah Asim. Covers personal identity, professional history, education, skills, achievements, hobbies and contact.</div>
+      <div class="sections-grid">
+        <div class="section-chip"><div class="chip-dot static"></div>Hero</div>
+        <div class="section-chip"><div class="chip-dot static"></div>Who Am I</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Work Experience</div>
+        <div class="section-chip"><div class="chip-dot static"></div>Education History</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Skill Set</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Achievements</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Journey (preview)</div>
+        <div class="section-chip"><div class="chip-dot static"></div>Me Time (Hobbies)</div>
+        <div class="section-chip"><div class="chip-dot static"></div>Contact</div>
+      </div>
+    </div>
+
+    <!-- JOURNEY -->
+    <div class="page-block">
+      <div class="page-id">PAGE 03</div>
+      <div class="page-name">Journey</div>
+      <div class="page-desc">A novel-style life story told as a single long scrollable page. Covers major life events, achievements, failures, how things were done and what was learned. Each event is a card on a timeline. Cards can link to related projects, articles or external content. This page is unique — no standard portfolio has anything like it.</div>
+      <div class="sections-grid">
+        <div class="section-chip"><div class="chip-dot static"></div>Hero</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Timeline</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Event Cards</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Related Links per Event</div>
+        <div class="section-chip"><div class="chip-dot static"></div>Contact</div>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="page-block">
+      <div class="page-id">PAGE 04</div>
+      <div class="page-name">Projects</div>
+      <div class="page-desc">Full dedicated page for all projects. Each project gets its own section with full details, visuals and links.</div>
+      <div class="sections-grid">
+        <div class="section-chip"><div class="chip-dot static"></div>Hero</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>One Section per Project</div>
+        <div class="section-chip"><div class="chip-dot static"></div>Contact</div>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="page-block">
+      <div class="page-id">PAGE 05</div>
+      <div class="page-name">Services</div>
+      <div class="page-desc">Each service offered gets its own dedicated section with description, related project previews (images/videos), links to live projects and testimonials.</div>
+      <div class="sections-grid">
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Web Development</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>UI / UX Design</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Graphic Design</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Branding</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Content Writing</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Technical Writing</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Articles</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Web Design</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>App Design</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Testimonials</div>
+        <div class="section-chip"><div class="chip-dot static"></div>Contact</div>
+      </div>
+    </div>
+
+    <!-- ARTICLES -->
+    <div class="page-block">
+      <div class="page-id">PAGE 06</div>
+      <div class="page-name">Articles</div>
+      <div class="page-desc">Professional articles on technology, skills, programming languages, industry updates and world events. Not personal blogs — structured written content.</div>
+      <div class="sections-grid">
+        <div class="section-chip"><div class="chip-dot static"></div>Hero</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Articles List</div>
+        <div class="section-chip"><div class="chip-dot static"></div>Contact</div>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="page-block">
+      <div class="page-id">PAGE 07</div>
+      <div class="page-name">Contact</div>
+      <div class="page-desc">Dedicated contact page with form, direct contact details and all social links.</div>
+      <div class="sections-grid">
+        <div class="section-chip"><div class="chip-dot static"></div>Contact Form</div>
+        <div class="section-chip"><div class="chip-dot static"></div>Contact Details</div>
+        <div class="section-chip"><div class="chip-dot static"></div>Find Me — Social Links</div>
+      </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div class="page-block">
+      <div class="page-id">PAGE 08</div>
+      <div class="page-name">Admin Panel</div>
+      <div class="page-desc">Private CMS panel. Accessible only by the owner. Two pages — content management and form responses. Secured by login.</div>
+      <div class="sections-grid">
+        <div class="section-chip"><div class="chip-dot static"></div>Login Page</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Manage Projects</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Manage Services</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Manage Experiences</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Manage Journey Events</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Manage Articles</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Manage Achievements</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>Manage Testimonials</div>
+        <div class="section-chip"><div class="chip-dot dynamic"></div>View Form Responses</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FUNCTIONAL REQUIREMENTS -->
+  <div class="section">
+    <div class="section-label">Section D</div>
+    <h2>Functional Requirements</h2>
+    <p style="font-size:13px; color:#666; font-style:italic; margin-bottom:16px;">What the system must do.</p>
+
+    <table class="req-table">
+      <tr>
+        <th>ID</th>
+        <th>Requirement</th>
+        <th>Priority</th>
+      </tr>
+      <tr>
+        <td class="req-id">FR-01</td>
+        <td>All pages must be navigable from the main navigation bar</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-02</td>
+        <td>Home page must display short previews of all major sections with links to full pages</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-03</td>
+        <td>Contact form must save submitted data to the database</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-04</td>
+        <td>Admin panel must be protected by a login — accessible only by the owner</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-05</td>
+        <td>Admin panel must allow full CRUD (create, read, update, delete) for all dynamic content</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-06</td>
+        <td>Admin panel must display all form responses submitted by visitors</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-07</td>
+        <td>Journey page must display events as a timeline with event cards in chronological order</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-08</td>
+        <td>Journey event cards must support links to related projects, articles and external content</td>
+        <td><span class="priority p-medium">MEDIUM</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-09</td>
+        <td>Services page must display related project previews (images/videos) per service with live links</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-10</td>
+        <td>Social links must be present — GitHub, LinkedIn, LeetCode and others</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-11</td>
+        <td>All dynamic content changes made in the admin panel must reflect immediately on the frontend</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-12</td>
+        <td>Articles must be publishable and manageable through the admin panel</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-13</td>
+        <td>Testimonials must be addable and manageable through the admin panel</td>
+        <td><span class="priority p-medium">MEDIUM</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-14</td>
+        <td>Achievements must be addable and manageable through the admin panel</td>
+        <td><span class="priority p-medium">MEDIUM</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-15</td>
+        <td>Dark mode must be default. Light mode toggle must be available on every page</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">FR-16</td>
+        <td>Page transitions, scroll animations, hover effects and a page loader must be implemented</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- NON FUNCTIONAL REQUIREMENTS -->
+  <div class="section">
+    <div class="section-label">Section D</div>
+    <h2>Non-Functional Requirements</h2>
+    <p style="font-size:13px; color:#666; font-style:italic; margin-bottom:16px;">How the system must behave.</p>
+
+    <table class="req-table">
+      <tr>
+        <th>ID</th>
+        <th>Requirement</th>
+        <th>Priority</th>
+      </tr>
+      <tr>
+        <td class="req-id">NF-01</td>
+        <td>The design must be visually unlike any standard portfolio — cinematic, luxury, editorial feel inspired by Vogue, Christopher Nolan films and Apple</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">NF-02</td>
+        <td>Every visitor must feel impressed on the first landing — the Hero section must deliver a wow effect</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">NF-03</td>
+        <td>Desktop only for initial release. Mobile support to be considered post-launch</td>
+        <td><span class="priority p-medium">MEDIUM</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">NF-04</td>
+        <td>Accent color to be decided during the UI Design stage — not locked in requirements</td>
+        <td><span class="priority p-medium">MEDIUM</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">NF-05</td>
+        <td>Dark and light mode must use the same layout — only colors change, not structure</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">NF-06</td>
+        <td>All code must be clean, readable and structured for easy future maintenance</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">NF-07</td>
+        <td>Admin panel must be simple to use — no technical knowledge required to manage content</td>
+        <td><span class="priority p-high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="req-id">NF-08</td>
+        <td>No special performance requirements for initial release</td>
+        <td><span class="priority p-low">LOW</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- DYNAMIC CONTENT / DB OVERVIEW -->
+  <div class="section">
+    <div class="section-label">Section C</div>
+    <h2>Dynamic Content — Database Overview</h2>
+    <p style="font-size:13px; color:#666; font-style:italic; margin-bottom:16px;">All collections that will be stored in MongoDB and managed via the Admin Panel. Detailed DB design will be completed in Stage 4.</p>
+
+    <div class="db-block">
+      <div class="db-name">Collection: projects</div>
+      <div class="db-fields">
+        <div class="db-field key">_id</div>
+        <div class="db-field">title</div>
+        <div class="db-field">description</div>
+        <div class="db-field">tags</div>
+        <div class="db-field">images</div>
+        <div class="db-field">live_url</div>
+        <div class="db-field">github_url</div>
+        <div class="db-field">service_category</div>
+        <div class="db-field">featured</div>
+        <div class="db-field">date</div>
+      </div>
+    </div>
+
+    <div class="db-block">
+      <div class="db-name">Collection: services</div>
+      <div class="db-fields">
+        <div class="db-field key">_id</div>
+        <div class="db-field">name</div>
+        <div class="db-field">description</div>
+        <div class="db-field">related_projects</div>
+        <div class="db-field">order</div>
+      </div>
+    </div>
+
+    <div class="db-block">
+      <div class="db-name">Collection: experiences</div>
+      <div class="db-fields">
+        <div class="db-field key">_id</div>
+        <div class="db-field">role</div>
+        <div class="db-field">company</div>
+        <div class="db-field">location</div>
+        <div class="db-field">from</div>
+        <div class="db-field">to</div>
+        <div class="db-field">description</div>
+        <div class="db-field">featured</div>
+      </div>
+    </div>
+
+    <div class="db-block">
+      <div class="db-name">Collection: journey_events</div>
+      <div class="db-fields">
+        <div class="db-field key">_id</div>
+        <div class="db-field">title</div>
+        <div class="db-field">story</div>
+        <div class="db-field">date</div>
+        <div class="db-field">category</div>
+        <div class="db-field">related_links</div>
+        <div class="db-field">images</div>
+        <div class="db-field">order</div>
+      </div>
+    </div>
+
+    <div class="db-block">
+      <div class="db-name">Collection: articles</div>
+      <div class="db-fields">
+        <div class="db-field key">_id</div>
+        <div class="db-field">title</div>
+        <div class="db-field">content</div>
+        <div class="db-field">category</div>
+        <div class="db-field">tags</div>
+        <div class="db-field">published_date</div>
+        <div class="db-field">status</div>
+        <div class="db-field">cover_image</div>
+      </div>
+    </div>
+
+    <div class="db-block">
+      <div class="db-name">Collection: achievements</div>
+      <div class="db-fields">
+        <div class="db-field key">_id</div>
+        <div class="db-field">title</div>
+        <div class="db-field">description</div>
+        <div class="db-field">category</div>
+        <div class="db-field">date</div>
+        <div class="db-field">image</div>
+      </div>
+    </div>
+
+    <div class="db-block">
+      <div class="db-name">Collection: testimonials</div>
+      <div class="db-fields">
+        <div class="db-field key">_id</div>
+        <div class="db-field">name</div>
+        <div class="db-field">role</div>
+        <div class="db-field">company</div>
+        <div class="db-field">content</div>
+        <div class="db-field">service_category</div>
+        <div class="db-field">date</div>
+      </div>
+    </div>
+
+    <div class="db-block">
+      <div class="db-name">Collection: form_responses</div>
+      <div class="db-fields">
+        <div class="db-field key">_id</div>
+        <div class="db-field">name</div>
+        <div class="db-field">email</div>
+        <div class="db-field">subject</div>
+        <div class="db-field">message</div>
+        <div class="db-field">submitted_at</div>
+        <div class="db-field">status</div>
+      </div>
+    </div>
+
+    <div class="db-block">
+      <div class="db-name">Collection: admin</div>
+      <div class="db-fields">
+        <div class="db-field key">_id</div>
+        <div class="db-field">username</div>
+        <div class="db-field">password_hash</div>
+        <div class="db-field">last_login</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DESIGN DIRECTION -->
+  <div class="section">
+    <div class="section-label">Section E</div>
+    <h2>Design Direction</h2>
+    <table class="info-table">
+      <tr><td>Theme</td><td>Cinematic & Luxury Fashion</td></tr>
+      <tr><td>Inspiration</td><td>Vogue editorial posters, Christopher Nolan films, Apple product pages</td></tr>
+      <tr><td>Default Mode</td><td>Dark</td></tr>
+      <tr><td>Light Mode</td><td>Same layout as dark mode — color palette changes only</td></tr>
+      <tr><td>Accent Color</td><td>TBD — to be decided during Stage 2 UI Design phase</td></tr>
+      <tr><td>Typography</td><td>Mixed — large bold display headings with thin elegant body text</td></tr>
+      <tr><td>Animations</td><td>Page loader, page transitions, scroll animations, hover effects</td></tr>
+      <tr><td>Hero Feel</td><td>Minimal black screen with slow cinematic text reveal — film opening style</td></tr>
+    </table>
+  </div>
+
+  <!-- SOCIAL LINKS -->
+  <div class="section">
+    <div class="section-label">Section D</div>
+    <h2>Social & External Links</h2>
+    <table class="info-table">
+      <tr><td>GitHub</td><td>github.com/AbdullahAxim</td></tr>
+      <tr><td>LinkedIn</td><td>linkedin.com/in/muhammad-abdullah-asim</td></tr>
+      <tr><td>LeetCode</td><td>Active profile — to be linked</td></tr>
+      <tr><td>Email</td><td>abdullahasimofficialmail2@gmail.com</td></tr>
+      <tr><td>Other Links</td><td>To be added during design phase</td></tr>
+    </table>
+  </div>
+
+  <!-- CHANGELOG -->
+  <div class="section">
+    <div class="section-label">Document History</div>
+    <h2>Changelog</h2>
+    <div class="changelog-entry">
+      <div class="cl-date">May 2026</div>
+      <div><span class="cl-tag tag-init">INIT</span></div>
+      <div>Version 1.0 created. All requirements gathered and documented. Stage 1 complete.</div>
+    </div>
+    <!-- Future entries added below -->
+  </div>
+
+  <!-- APPROVAL -->
+  <div class="section">
+    <div class="section-label">Sign Off</div>
+    <h2>Stage 1 Approval</h2>
+    <p style="font-size:14px; color:#555; margin-bottom:16px;">By approving this document, all requirements listed above are confirmed correct and complete. No design or development work begins until this document is approved.</p>
+    <div class="approval-box">
+      <div class="approval-field">
+        <div class="approval-label">Approved By</div>
+        <div class="approval-value">Muhammad Abdullah Asim</div>
+      </div>
+      <div class="approval-field">
+        <div class="approval-label">Date Approved</div>
+        <div class="approval-value">May 2026</div>
+      </div>
+      <div class="approval-field">
+        <div class="approval-label">Stage Status</div>
+        <div class="approval-value">Stage 1 — COMPLETE</div>
+      </div>
+      <div class="approval-field">
+        <div class="approval-label">Next Stage</div>
+        <div class="approval-value">Stage 2 — UI Design</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <span>portfolio-project / docs / REQUIREMENTS.html</span>
+    <span>Muhammad Abdullah Asim &nbsp;|&nbsp; github.com/AbdullahAxim</span>
+    <span>Version 1.0 &nbsp;|&nbsp; May 2026</span>
+  </div>
+
+</body>
+</html>
